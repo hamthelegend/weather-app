@@ -4,4 +4,6 @@
     <string name="humidity">Humidity</string>
     <string name="rainy">Rainy</string>
     <string name="clear">Clear</string>
+    <string name="connect">Connect</string>
+    <string name="connecting">Connecting…</string>
 </resources>

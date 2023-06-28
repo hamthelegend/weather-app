@@ -3,23 +3,16 @@ package com.cpe.weatherapp.ui.screen.main
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Thermostat
-import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cpe.weatherapp.R
@@ -29,7 +22,6 @@ import com.cpe.weatherapp.icons.Humidity
 import com.cpe.weatherapp.icons.MaterialSymbols
 import com.cpe.weatherapp.icons.Rainy
 import com.cpe.weatherapp.models.WeatherInfo
-import com.cpe.weatherapp.ui.shared.IconText
 import com.cpe.weatherapp.ui.shared.Spacer
 import com.cpe.weatherapp.ui.theme.WeatherAppTheme
 import com.cpe.weatherapp.units.C
@@ -89,59 +81,55 @@ fun WeatherInfo(
 }*/
 
 @Composable
-fun WeatherInfo(
+fun WeatherInfoView(
     weatherInfo: WeatherInfo,
     modifier: Modifier = Modifier,
     showFraction: Boolean = false,
 ) {
-    Surface(
+    Column(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.primaryContainer,
-        shape = CircleShape,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column(
-            modifier = Modifier.padding(64.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
+        Icon(
+            imageVector = if (weatherInfo.isRainy) {
+                MaterialSymbols.Rainy
+            } else {
+                if (weatherInfo.isDay) MaterialSymbols.ClearDay else MaterialSymbols.ClearNight
+            },
+            contentDescription = if (weatherInfo.isRainy) {
+                stringResource(R.string.rainy)
+            } else {
+                stringResource(R.string.clear)
+            },
+            modifier = Modifier.size(128.dp),
+        )
+        Spacer(height = 16.dp)
+        Text(
+            text = weatherInfo.temperature.toString(showFraction),
+            style = MaterialTheme.typography.displayLarge,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(height = 16.dp)
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                imageVector = if (weatherInfo.isRainy) {
-                    MaterialSymbols.Rainy
-                } else {
-                    if (weatherInfo.isDay) MaterialSymbols.ClearDay else MaterialSymbols.ClearNight
-                },
-                contentDescription = if (weatherInfo.isRainy) {
-                    stringResource(R.string.rainy)
-                } else {
-                    stringResource(R.string.clear)
-                },
-                modifier = Modifier.size(128.dp),
+                imageVector = MaterialSymbols.Humidity,
+                contentDescription = stringResource(R.string.humidity),
+                modifier = Modifier.size(24.dp),
             )
-            Spacer(height = 16.dp)
+            Spacer(width = 8.dp)
             Text(
-                text = weatherInfo.temperature.toString(showFraction),
-                style = MaterialTheme.typography.displayLarge
+                text = weatherInfo.humidity.toString(showFraction),
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Start,
             )
-            Spacer(height = 16.dp)
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = MaterialSymbols.Humidity,
-                    contentDescription = stringResource(R.string.humidity),
-                    modifier = Modifier.size(24.dp),
-                )
-                Spacer(width = 8.dp)
-                Text(
-                    text = weatherInfo.humidity.toString(showFraction),
-                    style = MaterialTheme.typography.headlineSmall,
-                )
-            }
         }
     }
 }
 
 @Preview
 @Composable
-fun WeatherInfoPreview() {
+fun WeatherInfoViewPreview() {
     val weatherInfo = WeatherInfo(
         temperature = 69.0.C,
         humidity = 69.0.percent,
@@ -150,7 +138,7 @@ fun WeatherInfoPreview() {
     )
 
     WeatherAppTheme {
-        WeatherInfo(
+        WeatherInfoView(
             weatherInfo = weatherInfo,
             modifier = Modifier,
         )

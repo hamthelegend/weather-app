@@ -1,9 +1,13 @@
 package com.cpe.weatherapp.ui.screen.main
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -12,8 +16,13 @@ import com.cpe.weatherapp.units.C
 import com.cpe.weatherapp.units.percent
 import java.time.LocalTime
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    connectionState: ConnectionState,
+    onConnectClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val weatherInfo = com.cpe.weatherapp.models.WeatherInfo(
         temperature = 69.0.C,
         humidity = 69.0.percent,
@@ -21,8 +30,27 @@ fun MainScreen() {
         time = LocalTime.now(),
     )
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        WeatherInfo(weatherInfo = weatherInfo, modifier = Modifier.align(Alignment.Center))
+    val color by animateColorAsState(
+        targetValue = when (connectionState) {
+            ConnectionState.Disconnected -> MaterialTheme.colorScheme.primary
+            else -> MaterialTheme.colorScheme.primaryContainer
+        }
+    )
+
+    Box(modifier = modifier.fillMaxSize()) {
+        CenterPill(
+            onClick = { if (connectionState == ConnectionState.Disconnected) onConnectClick() },
+            modifier = Modifier.align(Alignment.Center),
+            color = color,
+        ) {
+            AnimatedContent(targetState = connectionState) { targetState ->
+                when (targetState) {
+                    ConnectionState.Disconnected -> Connect()
+                    ConnectionState.Connecting -> Connecting()
+                    ConnectionState.Connected -> WeatherInfoView(weatherInfo = weatherInfo)
+                }
+            }
+        }
     }
 }
 
@@ -30,6 +58,9 @@ fun MainScreen() {
 @Composable
 fun MainScreenPreview() {
     WeatherAppTheme {
-        MainScreen()
+        MainScreen(
+            connectionState = ConnectionState.Disconnected,
+            onConnectClick = {},
+        )
     }
 }
