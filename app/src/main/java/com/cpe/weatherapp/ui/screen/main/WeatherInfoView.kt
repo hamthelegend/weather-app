@@ -1,9 +1,9 @@
 package com.cpe.weatherapp.ui.screen.main
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cpe.weatherapp.R
+import com.cpe.weatherapp.icons.BluetoothDisabled
 import com.cpe.weatherapp.icons.ClearDay
 import com.cpe.weatherapp.icons.ClearNight
 import com.cpe.weatherapp.icons.Humidity
@@ -83,6 +84,7 @@ fun WeatherInfo(
 @Composable
 fun WeatherInfoView(
     weatherInfo: WeatherInfo,
+    connectionState: ConnectionState,
     modifier: Modifier = Modifier,
     showFraction: Boolean = false,
 ) {
@@ -124,6 +126,16 @@ fun WeatherInfoView(
                 textAlign = TextAlign.Start,
             )
         }
+        AnimatedVisibility(visible = connectionState == ConnectionState.Disconnected) {
+            Column {
+                Spacer(height = 16.dp)
+                Icon(
+                    imageVector = MaterialSymbols.BluetoothDisabled,
+                    contentDescription = stringResource(R.string.disconnected),
+                    modifier = Modifier.size(24.dp),
+                )
+            }
+        }
     }
 }
 
@@ -141,6 +153,7 @@ fun WeatherInfoViewPreview() {
         WeatherInfoView(
             weatherInfo = weatherInfo,
             modifier = Modifier,
+            connectionState = ConnectionState.Disconnected,
         )
     }
 }

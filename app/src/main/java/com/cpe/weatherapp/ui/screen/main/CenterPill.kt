@@ -75,8 +75,14 @@ fun CenterPillWeatherInfoPreview() {
     )
 
     WeatherAppTheme {
-        CenterPill(onClick = {}) {
-            WeatherInfoView(weatherInfo = weatherInfo)
+        CenterPill(
+            onClick = {},
+            color = MaterialTheme.colorScheme.primary,
+        ) {
+            WeatherInfoView(
+                weatherInfo = weatherInfo,
+                connectionState = ConnectionState.Disconnected
+            )
         }
     }
 }
