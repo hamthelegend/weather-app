@@ -11,11 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.cpe.weatherapp.models.WeatherInfo
+import com.cpe.weatherapp.ui.models.Weather
+import com.cpe.weatherapp.ui.models.WeatherInfo
 import com.cpe.weatherapp.ui.theme.WeatherAppTheme
-import com.cpe.weatherapp.units.C
+import com.cpe.weatherapp.units.celsius
 import com.cpe.weatherapp.units.percent
-import java.time.LocalTime
+import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,10 +69,10 @@ fun CenterPillConnectingPreview() {
 @Composable
 fun CenterPillWeatherInfoPreview() {
     val weatherInfo = WeatherInfo(
-        temperature = 69.0.C,
+        temperature = 69.0.celsius,
         humidity = 69.0.percent,
-        isRainy = true,
-        time = LocalTime.now(),
+        weather = Weather.HeavyRain,
+        instant = Instant.now(),
     )
 
     WeatherAppTheme {

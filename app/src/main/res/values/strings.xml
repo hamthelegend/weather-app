@@ -2,8 +2,9 @@
     <string name="app_name">Weather App</string>
     <string name="temperature">Temperature</string>
     <string name="humidity">Humidity</string>
-    <string name="rainy">Rainy</string>
     <string name="clear">Clear</string>
+    <string name="light_rain">Light Rain</string>
+    <string name="heavy_rain">Heavy Rain</string>
     <string name="connect">Connect</string>
     <string name="connecting">Connecting…</string>
     <string name="disconnected">Disconnected</string>

@@ -26,11 +26,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
-import com.cpe.weatherapp.models.WeatherInfo
-import com.cpe.weatherapp.models.toWeatherInfo
+import com.cpe.weatherapp.ui.models.WeatherInfo
+import com.cpe.weatherapp.ui.models.toWeatherInfo
 import com.cpe.weatherapp.ui.screen.main.ConnectionState
 import com.cpe.weatherapp.ui.screen.main.MainScreen
 import com.cpe.weatherapp.ui.theme.WeatherAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,6 +42,7 @@ private const val REQUEST_ENABLE_BT = 1
 private const val ERROR_READ = 0
 
 @Suppress("CallToThreadRun")
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     val tag = "MainActivity"
@@ -142,14 +144,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    Column {
-                        MainScreen(
-                            weatherInfo = weatherInfo,
-                            connectionState = connectionState,
-                            onConnectClick = ::reload,
-                        )
-//                        DebugScreen()
-                    }
+                    MainScreen(
+                        weatherInfo = weatherInfo,
+                        connectionState = connectionState,
+                        onConnectClick = ::reload,
+                    )
                 }
             }
         }
@@ -165,14 +164,16 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun DebugScreen() {
-        Button(onClick = ::searchDevices) {
-            Text("Search")
+        Column {
+            Button(onClick = ::searchDevices) {
+                Text("Search")
+            }
+            Text(text = devices)
+            Button(enabled = canConnect, onClick = ::refreshReadings) {
+                Text(text = "Connect")
+            }
+            Text(text = readings)
         }
-        Text(text = devices)
-        Button(enabled = canConnect, onClick = ::refreshReadings) {
-            Text(text = "Connect")
-        }
-        Text(text = readings)
     }
 
     private fun searchDevices() {

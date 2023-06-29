@@ -22,64 +22,14 @@ import com.cpe.weatherapp.icons.ClearNight
 import com.cpe.weatherapp.icons.Humidity
 import com.cpe.weatherapp.icons.MaterialSymbols
 import com.cpe.weatherapp.icons.Rainy
-import com.cpe.weatherapp.models.WeatherInfo
+import com.cpe.weatherapp.icons.RainyHeavy
+import com.cpe.weatherapp.ui.models.Weather
+import com.cpe.weatherapp.ui.models.WeatherInfo
 import com.cpe.weatherapp.ui.shared.Spacer
 import com.cpe.weatherapp.ui.theme.WeatherAppTheme
-import com.cpe.weatherapp.units.C
+import com.cpe.weatherapp.units.celsius
 import com.cpe.weatherapp.units.percent
-import java.time.LocalTime
-
-/*@Composable
-fun WeatherInfo(
-    weatherInfo: WeatherInfo,
-    modifier: Modifier = Modifier,
-    showFraction: Boolean = false,
-) {
-    Surface(
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.primaryContainer,
-        shape = RoundedCornerShape(topStartPercent = 50, bottomStartPercent = 50),
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 64.dp, vertical = 32.dp),
-        ) {
-            Column {
-                Text(
-                    text = weatherInfo.temperature.toString(showFraction),
-                    style = MaterialTheme.typography.displayMedium
-                )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = MaterialSymbols.Humidity,
-                        contentDescription = stringResource(R.string.humidity),
-                        modifier = Modifier.size(16.dp),
-                    )
-                    Spacer(width = 4.dp)
-                    Text(
-                        text = weatherInfo.humidity.toString(showFraction),
-                        style = MaterialTheme.typography.labelLarge,
-                    )
-                }
-            }
-            Spacer(width = 32.dp)
-            Icon(
-                imageVector = if (weatherInfo.isRainy) {
-                    MaterialSymbols.Rainy
-                } else {
-                    if (weatherInfo.isDay) MaterialSymbols.ClearDay else MaterialSymbols.ClearNight
-                },
-                contentDescription = if (weatherInfo.isRainy) {
-                    stringResource(R.string.rainy)
-                } else {
-                    stringResource(R.string.clear)
-                },
-                modifier = Modifier.size(64.dp)
-            )
-        }
-    }
-}*/
+import java.time.Instant
 
 @Composable
 fun WeatherInfoView(
@@ -94,15 +44,16 @@ fun WeatherInfoView(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
-            imageVector = if (weatherInfo.isRainy) {
-                MaterialSymbols.Rainy
-            } else {
-                if (weatherInfo.isDay) MaterialSymbols.ClearDay else MaterialSymbols.ClearNight
+            imageVector = when (weatherInfo.weather) {
+                Weather.Clear ->
+                    if (weatherInfo.isDay) MaterialSymbols.ClearDay else MaterialSymbols.ClearNight
+                Weather.LightRain -> MaterialSymbols.Rainy
+                Weather.HeavyRain -> MaterialSymbols.RainyHeavy
             },
-            contentDescription = if (weatherInfo.isRainy) {
-                stringResource(R.string.rainy)
-            } else {
-                stringResource(R.string.clear)
+            contentDescription = when (weatherInfo.weather) {
+                Weather.Clear -> stringResource(id = R.string.clear)
+                Weather.LightRain -> stringResource(id = R.string.light_rain)
+                Weather.HeavyRain -> stringResource(id = R.string.heavy_rain)
             },
             modifier = Modifier.size(128.dp),
         )
@@ -128,7 +79,7 @@ fun WeatherInfoView(
         }
         AnimatedVisibility(visible = connectionState == ConnectionState.Disconnected) {
             Column {
-                Spacer(height = 16.dp)
+                Spacer(height = 32.dp)
                 Icon(
                     imageVector = MaterialSymbols.BluetoothDisabled,
                     contentDescription = stringResource(R.string.disconnected),
@@ -143,10 +94,10 @@ fun WeatherInfoView(
 @Composable
 fun WeatherInfoViewPreview() {
     val weatherInfo = WeatherInfo(
-        temperature = 69.0.C,
+        temperature = 69.0.celsius,
         humidity = 69.0.percent,
-        isRainy = true,
-        time = LocalTime.now(),
+        weather = Weather.HeavyRain,
+        instant = Instant.now(),
     )
 
     WeatherAppTheme {
