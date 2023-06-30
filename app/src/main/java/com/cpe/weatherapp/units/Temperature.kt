@@ -1,5 +1,7 @@
 package com.cpe.weatherapp.units
 
+import kotlin.math.roundToInt
+
 abstract class Temperature {
     abstract fun toString(showFraction: Boolean = true): String
 }
@@ -7,7 +9,7 @@ abstract class Temperature {
 val Double.celsius get() = Celsius(this)
 
 data class Celsius(val value: Double): Temperature() {
-    override fun toString(showFraction: Boolean) = "${if (showFraction) value else value.toInt()}°C"
+    override fun toString(showFraction: Boolean) = "${if (showFraction) value else value.roundToInt()}°C"
 
     fun toFahrenheit() = Fahrenheit(value * 9 / 5 + 32)
 }
@@ -15,7 +17,7 @@ data class Celsius(val value: Double): Temperature() {
 val Double.fahrenheit get() = Fahrenheit(this)
 
 data class Fahrenheit(val value: Double): Temperature() {
-    override fun toString(showFraction: Boolean) = "${if (showFraction) value else value.toInt()}°F"
+    override fun toString(showFraction: Boolean) = "${if (showFraction) value else value.roundToInt()}°F"
 
     fun toCelsius() = Celsius((value - 32) * 5 / 9)
 }

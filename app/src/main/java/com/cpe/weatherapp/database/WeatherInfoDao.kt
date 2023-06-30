@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface WeatherInfoDao {
 
-    @Query("SELECT * FROM weather")
+    @Query("SELECT * FROM weather ORDER BY id DESC")
     fun getAll(): Flow<List<WeatherInfoEntity>>
 
     @Query("SELECT * FROM weather WHERE id = :id")
-    fun get(id: Int): WeatherInfoEntity
+    fun get(id: Long): WeatherInfoEntity
 
     @Insert
     fun insert(weatherInfo: WeatherInfoEntity)

@@ -11,6 +11,7 @@ import java.time.ZoneId
 
 @Suppress("MemberVisibilityCanBePrivate")
 data class WeatherInfo(
+    val id: Long? = null,
     val temperature: Celsius,
     val humidity: Percent,
     val weather: Weather,
@@ -33,7 +34,11 @@ fun String.toWeatherInfo(): WeatherInfo? {
             "Heavy Raining" -> Weather.HeavyRain
             else -> Weather.Clear
         }
-        WeatherInfo(temperature.celsius, humidity.percent, weather)
+        WeatherInfo(
+            temperature = temperature.celsius,
+            humidity = humidity.percent,
+            weather = weather,
+        )
     } catch (exception: Exception) {
         null
     }

@@ -1,8 +1,7 @@
 package com.cpe.weatherapp.ui.screen.main
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -10,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.cpe.weatherapp.ui.models.Weather
 import com.cpe.weatherapp.ui.models.WeatherInfo
 import com.cpe.weatherapp.ui.theme.WeatherAppTheme
@@ -23,6 +21,7 @@ import java.time.Instant
 fun CenterPill(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    cornerRadiusPercent: Int = 50,
     color: Color = MaterialTheme.colorScheme.primaryContainer,
     content: @Composable () -> Unit,
 ) {
@@ -30,9 +29,9 @@ fun CenterPill(
         onClick = onClick,
         color = color,
         modifier = modifier,
-        shape = CircleShape,
+        shape = RoundedCornerShape(cornerRadiusPercent),
     ) {
-        Box(modifier = Modifier.padding(64.dp)) {
+        Box(modifier = Modifier) {
             content()
         }
     }

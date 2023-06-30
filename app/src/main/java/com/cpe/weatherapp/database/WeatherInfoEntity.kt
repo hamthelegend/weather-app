@@ -10,7 +10,7 @@ import java.time.Instant
 
 @Entity(tableName = "weather")
 data class WeatherInfoEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int? = null,
+    @PrimaryKey(autoGenerate = true) val id: Long? = null,
     val temperatureCelsius: Double,
     val humidityPercent: Double,
     val weather: Weather,
@@ -18,6 +18,7 @@ data class WeatherInfoEntity(
 )
 
 fun WeatherInfo.toWeatherInfoEntity() = WeatherInfoEntity(
+    id = id,
     temperatureCelsius = temperature.value,
     humidityPercent = humidity.value,
     weather = weather,
@@ -25,6 +26,7 @@ fun WeatherInfo.toWeatherInfoEntity() = WeatherInfoEntity(
 )
 
 fun WeatherInfoEntity.toWeatherInfo() = WeatherInfo(
+    id = id,
     temperature = temperatureCelsius.celsius,
     humidity = humidityPercent.percent,
     weather = weather,
